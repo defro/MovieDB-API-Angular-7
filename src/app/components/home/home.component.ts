@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MoviedbService } from '../../services/moviedb.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -7,22 +8,24 @@ import { MoviedbService } from '../../services/moviedb.service';
 })
 export class HomeComponent {
 
-  nuevasPeliculas: any[] = [];
+  newMovies: any[] = [];
   loading: boolean;
 
-  constructor(private moviedb: MoviedbService) {
+  constructor(private moviedb: MoviedbService, private router: Router) {
 
     this.loading = true;
 
-    this.moviedb.getDiscoverMovies()
+    this.moviedb.getLatestMovies()
       .subscribe((data: any) => {
-
-        console.log(data);
-        this.nuevasPeliculas = data;
+        //console.log(data);
+        this.newMovies = data.slice(0, 10);
         this.loading = false;
       });
 
   }
 
+  detail(movie: any) {
+    this.router.navigate(["/movie", movie.id]);
+  }
 
 }
